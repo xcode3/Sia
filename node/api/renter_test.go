@@ -597,7 +597,7 @@ func TestRenterHandlerContracts(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -630,7 +630,8 @@ func TestRenterHandlerContracts(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -644,7 +645,8 @@ func TestRenterHandlerContracts(t *testing.T) {
 	}
 
 	// The renter should now have 1 contract.
-	if err = st.getAPI("/renter/contracts", &contracts); err != nil {
+	query := fmt.Sprintf("?active=%v", true)
+	if err = st.getAPI("/renter/contracts"+query, &contracts); err != nil {
 		t.Fatal(err)
 	}
 	if len(contracts.Contracts) != 1 {
@@ -682,7 +684,7 @@ func TestRenterHandlerGetAndPost(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -770,7 +772,7 @@ func TestRenterLoadNonexistent(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -831,7 +833,7 @@ func TestRenterHandlerRename(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -863,7 +865,8 @@ func TestRenterHandlerRename(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -947,7 +950,7 @@ func TestRenterHandlerDelete(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -1014,7 +1017,7 @@ func TestRenterRelativePathErrorUpload(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -1077,7 +1080,7 @@ func TestRenterRelativePathErrorDownload(t *testing.T) {
 	}
 	defer st.server.panicClose()
 
-	// Anounce the host and start accepting contracts.
+	// Announce the host and start accepting contracts.
 	if err := st.announceHost(); err != nil {
 		t.Fatal(err)
 	}
@@ -1574,7 +1577,7 @@ func TestContractorHostRemoval(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// Anounce the hosts.
+	// Announce the hosts.
 	err = announceAllHosts(testGroup)
 	if err != nil {
 		t.Fatal(err)
@@ -1641,7 +1644,8 @@ func TestContractorHostRemoval(t *testing.T) {
 
 	// Get the values of the first and second contract.
 	var rc RenterContracts
-	err = st.getAPI("/renter/contracts", &rc)
+	query := fmt.Sprintf("?active=%v", true)
+	err = st.getAPI("/renter/contracts"+query, &rc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1684,7 +1688,7 @@ func TestContractorHostRemoval(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	// Anounce the hosts.
+	// Announce the hosts.
 	err = announceAllHosts(testGroup)
 	if err != nil {
 		t.Fatal(err)
@@ -1715,7 +1719,8 @@ func TestContractorHostRemoval(t *testing.T) {
 	// Verify that st and stH1 are dropped in favor of the newer, better hosts.
 	err = build.Retry(150, time.Millisecond*250, func() error {
 		var newContracts int
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1752,7 +1757,8 @@ func TestContractorHostRemoval(t *testing.T) {
 
 	// Grab the old contracts, then mine blocks to trigger a renew, and then
 	// wait until the renew is complete.
-	err = st.getAPI("/renter/contracts", &rc)
+	query = fmt.Sprintf("?active=%v", true)
+	err = st.getAPI("/renter/contracts"+query, &rc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1851,7 +1857,8 @@ func TestContractorHostRemoval(t *testing.T) {
 	// st and stH1 are dropped in favor of the newer, better hosts. The
 	// contracts should also have data in them.
 	err = build.Retry(50, time.Millisecond*250, func() error {
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}

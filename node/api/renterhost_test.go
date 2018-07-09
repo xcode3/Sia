@@ -59,7 +59,8 @@ func TestHostObligationAcceptingContracts(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -201,7 +202,8 @@ func TestHostAndRentVanilla(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -782,7 +784,8 @@ func TestRenterUploadDownload(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1050,7 +1053,8 @@ func TestRenterRenew(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1089,7 +1093,8 @@ func TestRenterRenew(t *testing.T) {
 
 	// Get current contract ID.
 	var rc RenterContracts
-	err = st.getAPI("/renter/contracts", &rc)
+	query := fmt.Sprintf("?active=%v", true)
+	err = st.getAPI("/renter/contracts"+query, &rc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1105,7 +1110,8 @@ func TestRenterRenew(t *testing.T) {
 	}
 	// Wait for the contract to be renewed.
 	for i := 0; i < 200 && (len(rc.Contracts) != 1 || rc.Contracts[0].ID == contractID); i++ {
-		st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		time.Sleep(100 * time.Millisecond)
 	}
 	if rc.Contracts[0].ID == contractID {
@@ -1291,7 +1297,8 @@ func TestHostAndRentReload(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1495,7 +1502,8 @@ func TestHostAndRenterRenewInterrupt(t *testing.T) {
 
 	// Get current contract ID.
 	var rc RenterContracts
-	err = st.getAPI("/renter/contracts", &rc)
+	query := fmt.Sprintf("?active=%v", true)
+	err = st.getAPI("/renter/contracts"+query, &rc)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1603,7 +1611,8 @@ func TestUploadedBytesReporting(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1741,7 +1750,8 @@ func TestRenterMissingHosts(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -2208,7 +2218,7 @@ func TestRemoteFileRepairMassive(t *testing.T) {
 		}
 		for _, f := range rf.Files {
 			if f.Redundancy != 1 {
-				return errors.New("file redudancy didn't decrement to x1")
+				return errors.New("file redundancy didn't decrement to x1")
 			}
 		}
 		return nil

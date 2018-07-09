@@ -677,7 +677,7 @@ func TestWalletTransactionGETid(t *testing.T) {
 	if len(wtg.UnconfirmedTransactions) != 2 {
 		t.Fatal("expecting two unconfirmed transactions in sender wallet")
 	}
-	// Check that undocumented API behaviour used in Sia-UI still works with
+	// Check that undocumented API behavior used in Sia-UI still works with
 	// current API.
 	err = st.getAPI("/wallet/transactions?startheight=0&endheight=-1", &wtg)
 	if err != nil {
@@ -1198,7 +1198,8 @@ func TestWalletSiafunds(t *testing.T) {
 	// Block until allowance has finished forming.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}

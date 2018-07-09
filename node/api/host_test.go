@@ -219,7 +219,8 @@ func TestWorkingStatus(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -340,7 +341,8 @@ func TestStorageHandler(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -590,7 +592,8 @@ func TestResizeNonemptyStorageFolder(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -950,7 +953,8 @@ func TestRemoveStorageFolderForced(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
@@ -1038,7 +1042,8 @@ func TestDeleteSector(t *testing.T) {
 	// Block until the allowance has finished forming contracts.
 	err = build.Retry(50, time.Millisecond*250, func() error {
 		var rc RenterContracts
-		err = st.getAPI("/renter/contracts", &rc)
+		query := fmt.Sprintf("?active=%v", true)
+		err = st.getAPI("/renter/contracts"+query, &rc)
 		if err != nil {
 			return errors.New("couldn't get renter stats")
 		}
